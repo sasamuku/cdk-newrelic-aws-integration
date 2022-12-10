@@ -41,12 +41,14 @@ class NewrelicStack extends TerraformStack {
       ingestType: "LICENSE",
     });
 
+    // 作成したAPI KeyをSystems Manager Parameter Storeに格納する
     new SsmParameter(this, "ApiKeyForFirehoseParameter", {
       name: `/${config.envName}/cdktf/newrelic/api_key_for_firehose`,
       type: 'String',
       value: apiKeyForFirehose.key
     });
 
+    // AWS CDKで作成したRoleのArnをSystems Manager Parameter Store経由で取得する
     const newrelicAwsRoleArnParameter = new DataAwsSsmParameter(this, 'NewrelicAwsRoleArnParameterData', {
       name: `/${config.envName}/newrelic_integrations/newrelic_aws_role/arn`,
     });

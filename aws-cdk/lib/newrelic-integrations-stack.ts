@@ -27,7 +27,7 @@ export class NewrelicIntegrationsStack extends Stack {
       description: 'used for new relic integration',
     });
 
-    // CDKTFで使用するパラメータをSystems Manager Parameter Storeに吐き出す
+    // CDKTFで使用するRole ARNをSystems Manager Parameter Storeに格納する
     new ssm.StringParameter(this, 'NewrelicAwsRoleArnParameter', {
       parameterName: `/${props.envName}/newrelic_integrations/newrelic_aws_role/arn`,
       stringValue: newrelicAwsRole.roleArn,

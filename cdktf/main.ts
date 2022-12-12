@@ -1,7 +1,7 @@
 // Copyright (c) HashiCorp, Inc
 // SPDX-License-Identifier: MPL-2.0
 import { Construct } from "constructs";
-import { App, TerraformStack } from "cdktf";
+import { App, TerraformStack, S3Backend } from "cdktf";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { DataAwsSsmParameter } from "@cdktf/provider-aws/lib/data-aws-ssm-parameter";
 import { SsmParameter } from "@cdktf/provider-aws/lib/ssm-parameter";
@@ -17,6 +17,13 @@ interface NewrelicStackConfig {
 class NewrelicStack extends TerraformStack {
   constructor(scope: Construct, id: string, config: NewrelicStackConfig) {
     super(scope, id);
+
+    // remote backendにS3を利用する場合
+    new S3Backend(this, {
+      bucket: `cdktf-remote-backend-${config.envName}`,
+      key: `${config.envName}/newrelic`,
+      region: "ap-northeast-1"
+    })
 
     new AwsProvider(this, "AWS", {
       region: "ap-northeast-1",

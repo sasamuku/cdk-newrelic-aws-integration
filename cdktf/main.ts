@@ -29,7 +29,7 @@ class NewrelicStack extends TerraformStack {
       region: "ap-northeast-1",
     });
 
-    // 手動作成したUser API KeyをAWS Systems Manager Parameter Storeに格納しておく
+    // 手動作成したUser API KeyをSystems Manager Parameter Store経由で取得する
     const apiKeyForProvider = new DataAwsSsmParameter(this, 'ApiKeyForProviderParameterData', {
       name: `/${config.envName}/cdktf/newrelic/api_key_for_provider`,
     });
@@ -40,6 +40,7 @@ class NewrelicStack extends TerraformStack {
       region: "US",
     });
 
+    // AWS(Amazon Kinesis Data Firehose)に渡すLICENSE Keyを生成
     const apiKeyForFirehose = new ApiAccessKey(this, "ApiKeyForFirehose", {
       name: "Ingest License key",
       notes: "For AWS Cloud Integrations (Used in Firehose)",
@@ -48,7 +49,7 @@ class NewrelicStack extends TerraformStack {
       ingestType: "LICENSE",
     });
 
-    // 作成したAPI KeyをSystems Manager Parameter Storeに格納する
+    // 作成したLICENSE KeyをSystems Manager Parameter Storeに格納する
     new SsmParameter(this, "ApiKeyForFirehoseParameter", {
       name: `/${config.envName}/cdktf/newrelic/api_key_for_firehose`,
       type: 'String',
